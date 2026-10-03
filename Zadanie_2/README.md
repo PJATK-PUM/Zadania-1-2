@@ -1,88 +1,79 @@
-## 🧠 Zadanie 2 – Budowa prostego modelu uczenia maszynowego w Kedro + GitHub
+## 🧠 Zadanie 2 – Model ML i połączenie datasetów w tym samym projekcie Kedro
 
 ### 🎯 Cel zadania
 
-Nauczyć się tworzenia i uruchamiania prostego pipeline’u uczenia maszynowego w **Kedro**, wykorzystując dane z pliku `wasz-plik.csv` (Titanic lub inny dowolny data set), oraz udokumentować projekt w **repozytorium GitHub**.
+W **tym samym projekcie Kedro co Zadanie 1** dodać pipeline uczenia maszynowego, przeprocesować datasety i **połączyć je w jeden spójny przepływ** (`kedro run`), a wyniki opisać na GitHubie.
+
+> Nie twórz nowego projektu Kedro ani nowego repo — kontynuujesz `pum_zadania_[nazwisko]` / `PUM_Zadania_[Nazwisko]`.
 
 ---
 
 ### 🧱 Zakres pracy
 
-W ramach zadania wykonaj:
-
-1. Przygotowanie danych,
-2. Stworzenie i trening modelu klasyfikacyjnego (np. przewidującego przeżycie pasażera),
-3. Ocena jakości modelu,
-4. Udokumentowanie wyników w GitHubie.
+1. Preprocessing datasetów z Zadania 1,
+2. Trening modelu klasyfikacyjnego (lub osobnych modeli per gałąź, potem wspólne raportowanie),
+3. Ocena jakości,
+4. **Połączenie** etapów EDA → prepare → train → evaluate w jednym pipeline Kedro,
+5. Aktualizacja dokumentacji w tym samym repo GitHub.
 
 ---
 
 ### 📍 Kroki do wykonania
 
-#### 1️⃣ Utwórz projekt Kedro
+#### 1️⃣ Otwórz istniejący projekt z Zadania 1
 
-1. Zainstaluj Kedro (Python 3.10+), np.:
+1. Upewnij się, że masz zależności:
    ```bash
    pip install kedro kedro-datasets scikit-learn pandas
    ```
-2. Utwórz nowy projekt (albo rozbuduj projekt z Zadania 1):
-   ```bash
-   kedro new --name pum_zajecia2_[twojenazwisko]
-   ```
-3. W `README.md` projektu wpisz opis, np.: „Model predykcji przeżycia pasażerów Titanic”.
+2. Datasety z Z1 nadal są w `data/01_raw/` i w `catalog.yml`.
+3. Zaktualizuj `README.md`: dopisz sekcję o modelowaniu i połączeniu pipeline’ów.
 
 ---
 
-#### 2️⃣ Załaduj dane
+#### 2️⃣ Ustal, jak łączysz datasety
 
-1. Dodaj do projektu plik `<wasz-plik>.csv` (dostępny w materiałach lub z repozytorium Kaggle), np.:
-   ```
-   data/01_raw/train.csv
-   ```
-2. Zarejestruj dataset w `conf/base/catalog.yml`.
-3. Sprawdź dane (notebook / `kedro ipython` / prosty node) — m.in. liczbę rekordów, kolumny i typy danych.
+Wybierz i opisz w `model_summary.md` jedną z strategii (albo własną, uzasadnioną):
 
----
+* **Osobne gałęzie, wspólny pipeline** — każdy dataset ma własny prepare/train, a pipeline składa je w jeden graf (`kedro run` odpala wszystko).
+* **Wspólny schemat** — te same kroki preprocessingu parametryzowane per dataset (`parameters.yml`).
+* **Połączenie tabel** — jeśli jest sensowny klucz / wspólna domena, zrób join / concat w node’ie i trenuj na zbiorze połączonym.
 
-#### 3️⃣ Przygotuj dane do modelowania
-
-Zaimplementuj node (lub node’y) preprocessingu w pipeline Kedro, który:
-
-* usuwa kolumny nieistotne, np. `Name`, `Ticket`, `Cabin`,
-* uzupełnia brakujące wartości w `Age` (np. medianą),
-* zamienia zmienne tekstowe (`Sex`, `Embarked`) na numeryczne (np. one-hot / ordinal encoding).
-
-Zapisz wynik jako dataset pośredni w katalogu (np. `data/03_primary/` lub `data/05_model_input/`).
-
-💡 **Podpowiedź:** trzymaj parametry (lista kolumn do usunięcia, strategia imputacji) w `conf/base/parameters.yml`.
+Nie musisz sztucznie sklejać niepasujących tabel — ważne, żeby w Kedro był **jeden projekt i jeden (lub wyraźnie złożony) pipeline**, a nie osobne luźne skrypty.
 
 ---
 
-#### 4️⃣ Zbuduj model w pipeline Kedro
+#### 3️⃣ Preprocessing (node’y Kedro)
 
-1. Dodaj node treningu modelu:
+Dla datasetów używanych do modelu:
 
-   * Target: `Survived`
-   * Typ problemu: **Classification**
-   * Algorytm: np. **Logistic Regression** lub **Random Forest** (`scikit-learn`)
+* usuń nieistotne kolumny,
+* uzupełnij braki (np. mediana dla numerycznych),
+* zakoduj zmienne kategoryczne,
+* zapisz wyniki do warstw katalogu (np. `03_primary` / `05_model_input`),
+* parametry trzymaj w `conf/base/parameters.yml`.
 
-2. Dodaj node ewaluacji i policz metryki:
+Przykład (Titanic-like): drop `Name`/`Ticket`/`Cabin`, imputacja `Age`, encoding `Sex`/`Embarked`, target `Survived`.
 
-   * Accuracy
-   * Precision / Recall
-   * Confusion matrix
+---
 
-3. Zapisz artefakty (model, metryki, macierz pomyłek) przez Data Catalog, np. do `data/06_models/` i `data/08_reporting/`.
-4. Uruchom pipeline:
+#### 4️⃣ Trening i ewaluacja
+
+1. Node treningu: klasyfikacja (np. Logistic Regression lub Random Forest).
+2. Node ewaluacji: Accuracy, Precision/Recall, confusion matrix.
+3. Artefakty w catalogu: model (`data/06_models/`), raporty (`data/08_reporting/`).
+4. Uruchom całość:
    ```bash
    kedro run
    ```
 
+Pipeline powinien obejmować **więcej niż jeden dataset** albo wyraźnie łączyć etapy z Z1 (np. tagi/pipeline’y `eda` + `data_science` rejestrowane w jednym projekcie).
+
 ---
 
-#### 5️⃣ Zaimplementuj kod w node’ach Kedro
+#### 5️⃣ Kod w node’ach (szkielet)
 
-W `src/.../pipelines/` (np. `nodes.py` + `pipeline.py`) zaimplementuj logikę odpowiadającą poniższemu szkieletowi:
+W `src/.../pipelines/` zaimplementuj logikę w stylu:
 
 ```python
 import pandas as pd
@@ -90,7 +81,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
-# Wczytanie danych
+# Wczytanie danych (z catalog / argumentów node'a)
 !!! miejsce na Twój kod !!!
 
 # Przygotowanie danych
@@ -106,63 +97,63 @@ from sklearn.metrics import accuracy_score
 !!! miejsce na Twój kod !!!
 ```
 
-Pipeline powinien dać się uruchomić komendą `kedro run` (bez ręcznego kopiowania kodu poza projekt).
+Całość ma działać przez `kedro run`, nie jako osobny skrypt obok projektu.
 
 ---
 
-#### 6️⃣ Udokumentuj projekt w GitHub
+#### 6️⃣ Dokumentacja w tym samym repo
 
-1. Utwórz repozytorium:
+Repo nadal:
 
-   ```
-   PUM_Zajęcia2_[TwojeNazwisko]
-   ```
+```
+PUM_Zadania_[TwojeNazwisko]
+```
 
-2. Dodaj do niego:
+Dodaj / zaktualizuj:
 
-   * plik `README.md` z opisem projektu,
-   * plik `model_summary.md` z wynikami (accuracy, confusion matrix itp.),
-   * kod pipeline’u Kedro (`src/`, `conf/`),
-   * zrzuty ekranu / artefakty (np. `kedro-viz`, struktura pipeline’ów, wykresy metryk),
-   * opcjonalnie: wyeksportowany model lub raporty z `data/08_reporting/`.
+* `README.md` — jak datasety są połączone w pipeline,
+* `model_summary.md` — metryki, confusion matrix, krótki wniosek,
+* kod `src/` + `conf/`,
+* artefakty (`kedro-viz`, wykresy metryk, schemat pipeline’u).
 
-3. Przykładowa struktura repozytorium:
+Przykładowa struktura po Z2:
 
-   ```
-   conf/
-     base/
-       catalog.yml
-       parameters.yml
-   data/
-     01_raw/
-       train.csv
-     08_reporting/
-       model_metrics.png
-   src/
-     .../pipelines/
-       data_science/
-         nodes.py
-         pipeline.py
-   README.md
-   model_summary.md
-   ```
+```
+conf/base/
+  catalog.yml
+  parameters.yml
+data/
+  01_raw/
+    dataset_a.csv
+    dataset_b.csv
+  05_model_input/
+  06_models/
+  08_reporting/
+src/.../pipelines/
+  eda/
+  data_science/
+    nodes.py
+    pipeline.py
+README.md
+raport.md          # z Zadania 1
+model_summary.md   # z Zadania 2
+```
 
 ---
 
-#### 7️⃣ Prześlij do oceny
+#### 7️⃣ Oddanie
 
-Wyślij **link do swojego repozytorium GitHub** prowadzącemu.
-Nie wysyłaj plików przez e-mail.
+Wyślij **ten sam link** do repo `PUM_Zadania_[TwojeNazwisko]` (po `push` z pipeline’em).
 
 ---
 
 ### 🧾 Kryteria oceny (propozycja)
 
-| Kryterium                                         | Punkty     |
-| ------------------------------------------------- | ---------- |
-| Poprawne przygotowanie danych                     | 2          |
-| Utworzenie i trenowanie modelu                    | 3          |
-| Ocena wyników i wnioski                           | 2          |
-| Implementacja pipeline’u Kedro (node’y + `kedro run`) | 2      |
-| Dokumentacja i repozytorium GitHub                | 1          |
-| **Łącznie**                                       | **10 pkt** |
+| Kryterium                                                    | Punkty     |
+| ------------------------------------------------------------ | ---------- |
+| Preprocessing datasetów w Kedro                              | 2          |
+| Trening modelu i metryki                                     | 3          |
+| Połączenie w jeden projekt/pipeline (wiele datasetów / gałęzi) | 2        |
+| Wnioski (`model_summary.md`)                                 | 2          |
+| Dokumentacja i repo GitHub                                   | 1          |
+| **Łącznie**                                                  | **10 pkt** |
