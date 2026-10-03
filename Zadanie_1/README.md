@@ -32,7 +32,7 @@ Nauczyć się pracy w projekcie **Kedro** oraz podstaw **GitHuba** poprzez:
 
 #### 2️⃣ Załaduj datasety (więcej niż jeden)
 
-1. Przygotuj **co najmniej 2 datasety** (np. Titanic + drugi zestaw CSV z materiałów : Kaggle / inna tabela).
+1. Przygotuj **co najmniej 2 datasety** (np. Titanic + drugi zestaw CSV z materiałów: Kaggle / inna tabela).
    Przykład pierwszego: [Titanic Dataset](https://www.kaggle.com/c/titanic/data).
 2. Umieść je w danych surowych, np.:
    ```
