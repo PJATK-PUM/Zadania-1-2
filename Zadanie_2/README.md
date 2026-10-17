@@ -151,9 +151,9 @@ Wyślij **ten sam link** do repo `PUM_Zadania_[TwojeNazwisko]` (po `push` z pipe
 
 | Kryterium                                                    | Punkty     |
 | ------------------------------------------------------------ | ---------- |
-| Preprocessing datasetów w Kedro                              | 2          |
-| Trening modelu i metryki                                     | 3          |
-| Połączenie w jeden projekt/pipeline (wiele datasetów / gałęzi) | 2        |
-| Wnioski (`model_summary.md`)                                 | 2          |
-| Dokumentacja i repo GitHub                                   | 1          |
-| **Łącznie**                                                  | **10 pkt** |
+| Preprocessing datasetów w Kedro                              | 4          |
+| Trening modelu i metryki                                     | 6          |
+| Połączenie w jeden projekt/pipeline (wiele datasetów / gałęzi) | 4        |
+| Wnioski (`model_summary.md`)                                 | 4          |
+| Dokumentacja i repo GitHub                                   | 2          |
+| **Łącznie**                                                  | **20 pkt** |
