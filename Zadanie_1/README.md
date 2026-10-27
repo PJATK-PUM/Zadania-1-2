@@ -25,7 +25,7 @@ Nauczyć się pracy w projekcie **Kedro** oraz podstaw **GitHuba** poprzez:
    ```bash
    kedro new --name pum_zadania_s[nr_indeksu]
    ```
-   Przykład: `pum_zadania_s12345`. Przy pracy zespołowej: `pum_zadania_s12345_s67890`.
+   Przykład: `pum_zadania_s12345` (praca indywidualna — jeden numer indeksu).
 3. Wejdź do katalogu projektu i doinstaluj zależności.
 4. W `README.md` opisz, że to wspólny projekt na Zadanie 1 i 2 (EDA → modelowanie).
 
@@ -77,13 +77,13 @@ W pliku `raport.md` (lub `raport.txt`) odpowiedz:
 
 #### 5️⃣ Repo GitHub (jedno na Z1+Z2) + branch zadania
 
-1. Utwórz **jedno prywatne** repo w organizacji **PJATK-PUM**. Nazwa **musi zawierać numer indeksu** (lub numery studentów):
+1. Utwórz **jedno prywatne** repo w organizacji **PJATK-PUM**. Praca **indywidualna** — nazwa **musi zawierać Twój numer indeksu**:
 
    ```
    PUM_Zadania_s[nr_indeksu]
    ```
 
-   Przykład: `PUM_Zadania_s12345`. Zespół: `PUM_Zadania_s12345_s67890`.
+   Przykład: `PUM_Zadania_s12345`.
 
 2. Rozwiązanie Zadania 1 umieść na **dedykowanym branchu**, np.:
 
