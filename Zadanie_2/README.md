@@ -4,7 +4,7 @@
 
 W **tym samym projekcie Kedro co Zadanie 1** dodać pipeline uczenia maszynowego, przeprocesować datasety i **połączyć je w jeden spójny przepływ** (`kedro run`), a wyniki opisać na GitHubie.
 
-> Nie twórz nowego projektu Kedro ani nowego repo — kontynuujesz `pum_zadania_[nazwisko]` / `PUM_Zadania_[Nazwisko]`.
+> Nie twórz nowego projektu Kedro ani nowego repo — kontynuujesz to samo repo z Zadania 1 (`PUM_Zadania_s[nr_indeksu]` / `pum_zadania_s[nr_indeksu]`). Zadanie 2 realizujesz na **osobnym branchu** (np. `zadanie-2`).
 
 ---
 
@@ -27,7 +27,11 @@ W **tym samym projekcie Kedro co Zadanie 1** dodać pipeline uczenia maszynowego
    pip install kedro kedro-datasets scikit-learn pandas
    ```
 2. Datasety z Z1 nadal są w `data/01_raw/` i w `catalog.yml`.
-3. Zaktualizuj `README.md`: dopisz sekcję o modelowaniu i połączeniu pipeline’ów.
+3. Utwórz **dedykowany branch** na Zadanie 2 (od `zadanie-1` lub `main` — byle rozwiązanie Z2 było na osobnym branchu):
+   ```bash
+   git checkout -b zadanie-2
+   ```
+4. Zaktualizuj `README.md`: dopisz sekcję o modelowaniu i połączeniu pipeline’ów.
 
 ---
 
@@ -103,13 +107,13 @@ Całość ma działać przez `kedro run`, nie jako osobny skrypt obok projektu.
 
 #### 6️⃣ Dokumentacja w tym samym repo
 
-Repo nadal:
+Repo nadal (z **numerem indeksu** w nazwie):
 
 ```
-PUM_Zadania_[TwojeNazwisko]
+PUM_Zadania_s[nr_indeksu]
 ```
 
-Dodaj / zaktualizuj:
+Dodaj / zaktualizuj na branchu `zadanie-2`:
 
 * `README.md` — jak datasety są połączone w pipeline,
 * `model_summary.md` — metryki, confusion matrix, krótki wniosek,
@@ -143,7 +147,10 @@ model_summary.md   # z Zadania 2
 
 #### 7️⃣ Oddanie
 
-Wyślij **ten sam link** do repo `PUM_Zadania_[TwojeNazwisko]` (po `push` z pipeline’em).
+1. `push` brancha `zadanie-2` na GitHub.
+2. Przez **Teams** wyślij prowadzącemu **link do brancha** `zadanie-2` (np. `…/tree/zadanie-2`) — **jako link**, nie jako plik tekstowy.
+3. Każda **poprawka** wymaga przesłania **nowego linka**.
+4. **Commity przesłane po ostatecznym terminie** będą traktowane jako **oszustwo**.
 
 ---
 
